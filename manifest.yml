@@ -1,0 +1,5 @@
+applications:
+- name: <sua-id>-desafio7-behindthecode
+  memory: 256M
+  instances: 1
+  buildpack: sdk-for-nodejs

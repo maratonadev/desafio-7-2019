@@ -1,0 +1,272 @@
+{
+  "name": "BTC-Jacob",
+  "intents": [],
+  "entities": [],
+  "language": "pt-br",
+  "metadata": {
+    "api_version": {
+      "major_version": "v1",
+      "minor_version": "2018-09-20"
+    }
+  },
+  "description": "Seu corretor virtual de investimentos",
+  "dialog_nodes": [
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Sentimento: neutro"
+              }
+            ],
+            "response_type": "text"
+          }
+        ]
+      },
+      "parent": "node_4_1564079904113",
+      "metadata": {},
+      "conditions": "$result.resposta.sentiment == \"neutral\"",
+      "dialog_node": "node_8_1564080463784",
+      "previous_sibling": "node_7_1564079950071"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Sentimento: negativo"
+              }
+            ],
+            "response_type": "text"
+          }
+        ]
+      },
+      "parent": "node_4_1564079904113",
+      "metadata": {},
+      "conditions": "$result.resposta.sentiment == \"negative\"",
+      "dialog_node": "node_7_1564079950071",
+      "previous_sibling": "node_5_1564079944365"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Sentimento: positivo"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_4_1564079904113",
+      "metadata": {},
+      "conditions": "$result.resposta.sentiment == \"positive\"",
+      "dialog_node": "node_5_1564079944365"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Perfeito! Detectei a seguinte movimentação: $result.resposta.cliente quer $result.resposta.operacao fundos $result.resposta.fundo no valor de $result.resposta.valor"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1563908632679",
+      "metadata": {},
+      "conditions": "$result.resposta.valor",
+      "dialog_node": "node_1_1564074131094",
+      "previous_sibling": "node_4_1564079904113"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Detectei a seguinte movimentação: $result.resposta.cliente quer $result.resposta.operacao fundos $result.resposta.fundo."
+              }
+            ],
+            "response_type": "text"
+          }
+        ]
+      },
+      "parent": "node_1_1563908632679",
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "node_3_1564074248720",
+      "previous_sibling": "node_2_1564074148310"
+    },
+    {
+      "type": "response_condition",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Detectei que cliente $result.resposta.cliente deseja obter a relação de fundos do banco $result.resposta.fundo."
+              }
+            ],
+            "response_type": "text"
+          }
+        ]
+      },
+      "parent": "node_1_1563908632679",
+      "metadata": {},
+      "conditions": "$result.resposta.operacao == \"relação de fundos\"",
+      "dialog_node": "node_2_1564074148310",
+      "previous_sibling": "node_1_1564074131094"
+    },
+    {
+      "type": "standard",
+      "output": {},
+      "parent": "node_1_1563908632679",
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "conditions": "$result.resposta.sentiment",
+      "dialog_node": "node_4_1564079904113",
+      "digress_out": "allow_all"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Não entendi, pode me explicar novamente?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_1_1563893099978",
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "node_2_1563908666488",
+      "previous_sibling": "node_1_1563908632679"
+    },
+    {
+      "type": "standard",
+      "output": {},
+      "parent": "node_1_1563893099978",
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "next_step": {
+        "behavior": "skip_user_input"
+      },
+      "conditions": "$result.err == false",
+      "dialog_node": "node_1_1563908632679",
+      "digress_out": "allow_all"
+    },
+    {
+      "type": "standard",
+      "title": "Em outros casos",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Eu não entendi. Você pode tentar reformular a frase. Por favor entre com a informação no seguinte formato: Quero vender R$1000,00 em ações do Supermercado Super."
+              },
+              {
+                "text": "Você pode reformular sua afirmação? Eu não estou entendendo. Por favor entre com a informação no seguinte formato: Quero comprar R$1000,00 em ações do Supermercado Super."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "Em outros casos",
+      "previous_sibling": "node_1_1563893099978"
+    },
+    {
+      "type": "standard",
+      "title": "ExtraiEntidades",
+      "output": {
+        "generic": []
+      },
+      "actions": [
+        {
+          "name": "/ORG DA FUNCTION/actions/PACOTE DA SUA FUNCTION/NOME DA SUA FUNCTION",
+          "type": "server",
+          "parameters": {
+            "texto": "$resp"
+          },
+          "credentials": "$private.my_credentials",
+          "result_variable": "$result"
+        }
+      ],
+      "context": {
+        "resp": "<?input.text?>",
+        "private": {
+          "my_credentials": {
+            "api_key": "COLOQUE A API KEY DA SUA ACTION"
+          }
+        }
+      },
+      "metadata": {},
+      "next_step": {
+        "behavior": "skip_user_input"
+      },
+      "conditions": "true",
+      "dialog_node": "node_1_1563893099978",
+      "previous_sibling": "Bem-vindo"
+    },
+    {
+      "type": "standard",
+      "title": "Bem-vindo",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Olá. Sou Jacob, seu assistente de investimentos! Caso seu cliente deseje comprar, vender ou saber a relação de fundos de investimento de algum banco, apenas me informe o nome do fundo, a movimentação e seu respetivo valor. Exemplo: O Daniel quer resgatar R\\$1000,00 de seus fundos TXP."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {},
+      "conditions": "welcome",
+      "dialog_node": "Bem-vindo"
+    }
+  ],
+  "workspace_id": "605951f3-8cc7-4b7a-8dbd-97cc2d3b78c2",
+  "counterexamples": [],
+  "system_settings": {
+    "tooling": {
+      "store_generic_responses": true
+    }
+  },
+  "learning_opt_out": false,
+  "status": "Available"
+}
